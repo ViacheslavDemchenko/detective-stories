@@ -1,0 +1,14 @@
+UNIVERSAL COLLECTIBLE OBJECTS — v1
+
+All detective cases use src/collectibles.js.
+Case files contain DATA only: image, x/y/w/h percentages, evidence id, requirements.
+The engine renders inside the same .scene-stage as the location background.
+Therefore background and objects scale/crop together on every screen size.
+Collected objects are not rendered again after state.evidence is saved.
+Hover/focus reveals the label on mouse/keyboard; touch directly collects the visible object.
+Coarse-pointer devices receive a larger invisible hit area without resizing the PNG.
+
+Current migration:
+- Mayak: Stepan journal uses universal collectible system.
+- Family Recipe: universal layer and renderer are connected; collectibleDefs is ready for object assets.
+- Existing non-object evidence hotspots remain unchanged until a separate scene PNG object is supplied.

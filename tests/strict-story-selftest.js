@@ -1,0 +1,25 @@
+const fs=require('fs');
+const path=require('path');
+const source=fs.readFileSync(path.join(__dirname,'..','src','main.js'),'utf8');
+function ok(cond,msg){if(!cond)throw new Error(msg)}
+ok(source.includes("title:'Винный погреб'"),'Wine cellar is not active in scenario');
+ok(source.includes("title:'Комната персонала'"),'Staff room missing');
+ok(source.includes("title:'Семейный архив'"),'Archive missing');
+ok(source.includes("Кадр с камеры 20:26") && source.includes('книги при нем нет'),'20:26 must show Viktor without the book');
+ok(!source.includes("label:'Отдельный секрет'"),'Separate-secret relation still exists');
+ok(!source.includes("relation:'side'"),'Side relation still exists');
+ok(source.includes('Павел и Лиза скрывали передачу фотографий'),'Pavel/Liza branch missing');
+ok(source.includes('Вы работали в день исчезновения книги?') && source.includes('У меня был выходной'),'Lisa false initial alibi missing');
+ok(source.includes("staffSchedule:{name:'Доска смен'") && source.includes('напротив Лизы указана вечерняя смена'),'Staff schedule must directly disprove Lisa');
+ok(source.includes("id:'scheduleLie'") && source.includes("needs:'staffSchedule'") && source.includes("unlockTopic:'after'"),'Lisa confrontation must unlock only after her lie and the staff schedule');
+ok(source.includes("id:'afterTruth'") && source.includes("unlockTopic:'scheduleLie'"),'Lisa explanation follow-up missing');
+ok(source.includes("id:'before',label:'Что вы видели перед отключением?',unlockTopic:'scheduleLie'"),'Lisa must not reveal she witnessed Viktor before the schedule exposes her lie');
+ok(source.includes("id:'marina',label:'Видели ли вы Марину в служебной части?',needs:'cameraMarina',unlockTopic:'scheduleLie'"),'Lisa must not reveal service-area observations before the schedule exposes her lie');
+ok(source.includes("lizaExposed=id==='liza'") && source.includes("'Подозреваемая'"),'Lisa must become a suspect after her lie is exposed');
+ok(source.includes('Копия Антона не связана с нынешним исчезновением'),'Anton branch missing');
+ok(source.includes('Интерес Дмитрия связан с семейной историей'),'Dmitry branch missing');
+ok(source.includes('Виктор первым спрятал книгу в сейфе'),'Viktor first-stage conclusion missing');
+ok(source.includes('Марина переместила книгу после Виктора'),'Marina second-stage conclusion missing');
+ok(source.includes("requires:['d:bookOnDesk','e:camera','e:safe'],status:'yes'") && source.includes("deductionId:'viktorHidBookCamera'"),'Matrix must be able to create Viktor first-stage conclusion');
+ok(source.includes("stateCopy.suspectMatrixResults?.['viktor:opportunity']") && source.includes("stateCopy.deductions.push('viktorHidBook')"),'Legacy Matrix saves must be repaired');
+console.log('STRICT STORY SELFTEST: PASS');

@@ -1,0 +1,1578 @@
+/* =========================================================
+   RESPONSIVE LAYOUT — 2026-10-03 AUDITED V2
+   Interface layout is Grid/Flex first.
+   Absolute positioning remains only in the legacy scene layers
+   where hotspots/character overlays must follow image coordinates.
+   ========================================================= */
+
+:root{
+  --ui-gap:clamp(10px,1.4vw,22px);
+  --ui-pad:clamp(10px,1.8vw,28px);
+  --ui-radius:clamp(14px,1.5vw,24px);
+  --tap:44px;
+  --content-max:1600px;
+}
+
+html,body,#app{width:100%;min-width:0;min-height:100%;height:100%;}
+html{overflow:hidden;}
+body{margin:0;overflow:hidden;}
+*{box-sizing:border-box;min-width:0;}
+img{max-width:100%;}
+button,select,input,textarea{font:inherit;}
+button{min-height:var(--tap);touch-action:manipulation;}
+button:hover,button:active{transform:none!important;}
+
+/* ---------- Screens ---------- */
+.screen{
+  position:fixed!important;
+  inset:0!important;
+  width:100%;
+  height:100dvh;
+  min-height:0;
+  overflow:hidden;
+}
+.screen.active{display:grid!important;}
+
+/* ---------- Main menu ---------- */
+.menu-screen{
+  grid-template-areas:"layer";
+  overflow:auto;
+  overscroll-behavior:contain;
+}
+.menu-screen>.menu-shade,
+.menu-screen>.menu-layout{grid-area:layer;}
+.menu-shade{
+  position:static!important;
+  width:100%;
+  min-height:100%;
+  pointer-events:none;
+}
+.menu-layout{
+  width:min(var(--content-max),100%);
+  margin-inline:auto;
+  padding:clamp(18px,4vw,64px);
+  display:grid;
+  grid-template-columns:minmax(280px,.9fr) minmax(440px,1.35fr);
+  gap:clamp(28px,5vw,84px);
+  align-items:center;
+  align-self:center;
+}
+.menu-hero,.menu-library{min-width:0;}
+.menu-stats{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--ui-gap);
+}
+.menu-actions,.menu-story-actions{
+  display:flex!important;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.menu-story-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--ui-gap);
+}
+.menu-story-card.featured{grid-column:1/-1;}
+.menu-story-card{min-width:0;}
+
+/* ---------- Game shell ---------- */
+.game-screen.active{
+  display:grid!important;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  background:
+    radial-gradient(circle at 12% 42%,rgba(126,72,37,.24) 0,rgba(126,72,37,0) 34%),
+    radial-gradient(circle at 88% 38%,rgba(112,58,31,.20) 0,rgba(112,58,31,0) 32%),
+    linear-gradient(135deg,#17110d 0%,#0d1012 48%,#18100c 100%);
+}
+.topbar{
+  position:static!important;
+  width:100%;
+  height:auto!important;
+  min-height:clamp(56px,7dvh,72px);
+  padding:max(8px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));
+  display:flex!important;
+  align-items:center;
+  gap:12px;
+  border-radius:0!important;
+  z-index:30;
+}
+.location-title-wrap{flex:1 1 auto;min-width:0;}
+.location-title-wrap strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+
+.scene{
+  position:relative!important;
+  inset:auto!important;
+  width:100%;
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+  display:grid!important;
+  grid-template-areas:"stage";
+  place-items:center;
+  background:
+    radial-gradient(ellipse at 15% 52%,rgba(118,69,38,.20) 0,rgba(118,69,38,0) 38%),
+    radial-gradient(ellipse at 85% 48%,rgba(103,56,32,.18) 0,rgba(103,56,32,0) 36%),
+    linear-gradient(135deg,#16110e 0%,#0d1012 50%,#17110e 100%);
+  container-type:size;
+}
+.scene-stage,
+.objective{grid-area:stage;}
+.scene-stage{
+  position:relative!important;
+  left:auto!important;
+  top:auto!important;
+  transform:none!important;
+  width:min(100cqw,calc(100cqh * 16 / 9));
+  height:auto!important;
+  max-width:100%;
+  max-height:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  align-self:center;
+  justify-self:center;
+  box-shadow:0 0 52px rgba(0,0,0,.42);
+  border-inline:1px solid rgba(215,180,106,.08);
+}
+@supports not (width:1cqw){
+  .scene-stage{
+    width:min(100%,calc((100dvh - 150px) * 16 / 9));
+  }
+}
+/* These layers intentionally remain coordinate-bound to the location image. */
+.scene-bg,.scene-occlusion,.scene-cast,.character-highlights,.hotspots,.scene-vignette{
+  /* inherited absolute positioning is intentional for scene coordinate mapping */
+}
+.objective{
+  position:static!important;
+  left:auto!important;
+  bottom:auto!important;
+  width:min(430px,calc(100% - 24px));
+  margin:12px;
+  align-self:end;
+  justify-self:start;
+  z-index:20;
+}
+.dock{
+  position:static!important;
+  left:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  justify-self:center;
+  width:min(560px,calc(100% - 20px));
+  margin:8px auto max(8px,env(safe-area-inset-bottom));
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+  z-index:30;
+}
+.dock button{
+  min-width:0!important;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  padding:8px 6px;
+}
+
+.toast{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  top:max(76px,calc(env(safe-area-inset-top) + 64px))!important;
+  transform:none!important;
+  width:max-content;
+  max-width:min(640px,calc(100vw - 24px));
+  margin-inline:auto;
+  text-align:center;
+}
+.toast.show{transform:none!important;}
+
+/* ---------- Generic modal ---------- */
+.modal{
+  position:fixed!important;
+  inset:0!important;
+  padding:clamp(10px,2vw,30px)!important;
+  display:grid!important;
+  grid-template-areas:"modal";
+  place-items:center;
+  overflow:hidden;
+}
+.modal.hidden{display:none!important;}
+.modal-backdrop{
+  position:static!important;
+  grid-area:modal;
+  width:100%;
+  height:100%;
+}
+.modal-shell{
+  position:static!important;
+  grid-area:modal;
+  width:min(1180px,100%)!important;
+  max-width:100%!important;
+  max-height:min(92dvh,960px)!important;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:1;
+}
+.modal-head{
+  flex:0 0 auto;
+  display:flex!important;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+.modal-head>div{min-width:0;}
+.modal-head h2{overflow-wrap:anywhere;}
+.modal-body{
+  min-height:0;
+  overflow:auto!important;
+  overscroll-behavior:contain;
+}
+
+/* ---------- Prologue ---------- */
+.prologue-overlay{
+  position:fixed!important;
+  inset:0!important;
+  display:grid!important;
+  grid-template-areas:"prologue";
+  place-items:center;
+  padding:clamp(10px,3vw,48px);
+  overflow:auto;
+}
+.prologue-overlay.hidden{display:none!important;}
+.prologue-backdrop{
+  position:static!important;
+  grid-area:prologue;
+  width:100%;
+  height:100%;
+}
+.prologue-card{
+  position:static!important;
+  grid-area:prologue;
+  width:min(1100px,100%);
+  max-height:90dvh;
+  display:grid!important;
+  grid-template-columns:minmax(280px,.9fr) minmax(320px,1.1fr);
+  gap:clamp(18px,3vw,42px);
+  overflow:auto;
+  z-index:1;
+}
+.prologue-media-wrap{min-height:0;}
+.prologue-image{width:100%;height:100%;max-height:70dvh;object-fit:cover;}
+.prologue-copy{display:flex;flex-direction:column;justify-content:center;min-width:0;}
+
+/* ---------- Interrogation ---------- */
+.interrogation{
+  position:fixed!important;
+  inset:0!important;
+  overflow:hidden!important;
+  padding:clamp(12px,2vw,32px)!important;
+  display:grid!important;
+  grid-template-columns:minmax(280px,1fr) minmax(480px,720px);
+  grid-template-rows:minmax(0,1fr);
+  column-gap:clamp(16px,2.2vw,34px);
+  background:#080a0c;
+}
+.interrogation.hidden{display:none!important;}
+/* Full-screen decorative layers are intentionally coordinate-free overlays. */
+.interrogation-v5 .cinema-bg,
+.interrogation-v5 .cinema-grade,
+.interrogation-v5 .cinema-vignette{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  pointer-events:none;
+  transform:none!important;
+}
+.interrogation-v5 .cinema-bg{
+  z-index:0;
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+}
+.interrogation-v5 .cinema-grade{z-index:1;}
+.interrogation-v5 .cinema-vignette{z-index:2;}
+.cinema-back{
+  position:static!important;
+  left:auto!important;
+  top:auto!important;
+  grid-column:1;
+  grid-row:1;
+  align-self:start;
+  justify-self:start;
+  z-index:20;
+}
+.cinema-subject-wrap{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  height:100%!important;
+  grid-column:1;
+  grid-row:1;
+  display:flex!important;
+  align-items:flex-end;
+  justify-content:center;
+  pointer-events:none;
+  z-index:4;
+  background:radial-gradient(circle at 50% 78%,rgba(215,180,106,.08),transparent 48%);
+}
+.cinema-subject-glow{display:none!important;}
+.interrogation-v5 .cinema-subject{
+  position:static!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  width:min(100%,620px)!important;
+  height:min(88dvh,900px)!important;
+  max-width:100%;
+  object-fit:contain;
+  object-position:center bottom;
+  align-self:flex-end;
+}
+.interrogation-v5[data-suspect] .cinema-subject{
+  left:auto!important;bottom:auto!important;width:min(100%,620px)!important;height:min(88dvh,900px)!important;
+}
+.cinema-dialogue-panel{
+  position:static!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  grid-column:2;
+  grid-row:1;
+  align-self:start;
+  justify-self:stretch;
+  width:100%!important;
+  max-width:none!important;
+  max-height:calc(100dvh - 2 * clamp(12px,2vw,32px))!important;
+  overflow:auto;
+  z-index:10;
+}
+.cinema-person-head,
+.cinema-statement-head,
+.cinema-topics-head,
+.cinema-progress-copy,
+.cinema-evidence-mini{flex-wrap:wrap;}
+.cinema-person-head h1{overflow-wrap:anywhere;}
+.interrogation-v5 .cinema-topic-list{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.interrogation-v5 .cinema-topic-list button{min-width:0;overflow-wrap:anywhere;}
+
+/* Detective thought uses the same two-column grid as interrogation,
+   so its top edge and the interrogation panel share one layout line. */
+.modal.detective-nonmodal{
+  position:fixed!important;
+  inset:0!important;
+  padding:clamp(12px,2vw,32px)!important;
+  display:grid!important;
+  grid-template-columns:minmax(280px,1fr) minmax(480px,720px);
+  grid-template-rows:minmax(0,1fr);
+  column-gap:clamp(16px,2.2vw,34px);
+  place-items:stretch;
+  pointer-events:none!important;
+  background:transparent!important;
+  z-index:75;
+}
+.modal.detective-nonmodal .modal-backdrop{display:none!important;}
+.modal.detective-nonmodal .detective-modal-shell{
+  position:static!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  grid-column:1;
+  grid-row:1;
+  align-self:start;
+  justify-self:end;
+  width:min(480px,82%)!important;
+  max-width:480px!important;
+  max-height:calc(100dvh - 2 * clamp(12px,2vw,32px))!important;
+  pointer-events:auto!important;
+  z-index:1!important;
+}
+.modal.detective-nonmodal .detective-modal-body{
+  max-height:none!important;
+  overflow:auto!important;
+}
+
+/* ---------- Contradiction ---------- */
+.contradiction{
+  position:fixed!important;
+  inset:0!important;
+  display:grid!important;
+  place-items:center;
+  padding:clamp(10px,2vw,24px)!important;
+  overflow:auto;
+}
+.contradiction.hidden{display:none!important;}
+.contradiction-card{
+  position:static!important;
+  width:min(780px,100%)!important;
+  max-height:92dvh!important;
+  overflow:auto;
+}
+.contradiction-choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+.contradiction-actions{display:flex!important;flex-wrap:wrap;gap:10px;justify-content:flex-end;}
+
+/* ---------- Map and cards ---------- */
+.map-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))!important;}
+.map-node{
+  position:relative!important;
+  display:grid!important;
+  grid-template-areas:"map";
+}
+.map-node .map-thumb,
+.map-node .map-copy{
+  position:static!important;
+  inset:auto!important;
+  grid-area:map;
+}
+.map-node .map-thumb{width:100%;height:100%;min-height:150px;}
+.map-node .map-copy{align-self:end;z-index:2;padding:12px;}
+.map-node::after{grid-area:map;position:static!important;inset:auto!important;z-index:1;pointer-events:none;}
+
+/* ---------- Common collections ---------- */
+.people-grid,
+.evidence-library,
+.evidence-library-grid{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))!important;
+  gap:var(--ui-gap)!important;
+}
+.case-board{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+
+/* ---------- Suspect matrix ---------- */
+.suspect-matrix-layout{
+  min-height:0!important;
+  height:auto!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1.55fr) minmax(300px,.65fr)!important;
+}
+.suspect-matrix-main,.suspect-matrix-detail{min-width:0;min-height:0;}
+.suspect-matrix-scroll{overflow:auto;overscroll-behavior:contain;}
+.suspect-matrix-table{min-width:880px!important;}
+.suspect-matrix-materials{max-height:min(44dvh,440px)!important;}
+
+/* ---------- Guides / secondary overlays ---------- */
+.investigation-guide{
+  position:fixed!important;
+  inset:0!important;
+  display:grid!important;
+  grid-template-areas:"guide";
+  place-items:center;
+  padding:16px;
+}
+.investigation-guide.hidden{display:none!important;}
+.investigation-guide-backdrop{
+  position:static!important;
+  inset:auto!important;
+  grid-area:guide;
+  width:100%;height:100%;
+}
+.investigation-guide-card{
+  position:static!important;
+  grid-area:guide;
+  width:min(720px,100%)!important;
+  max-height:90dvh;
+  overflow:auto;
+  z-index:1;
+}
+.investigation-guide-steps{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+
+/* ---------- Desktop / tablet ---------- */
+@media (max-width:1180px){
+  .menu-layout{grid-template-columns:1fr;align-items:start;}
+  .menu-library{width:100%;}
+  .interrogation,
+  .modal.detective-nonmodal{
+    grid-template-columns:minmax(240px,.85fr) minmax(430px,1.15fr);
+  }
+  .modal.detective-nonmodal .detective-modal-shell{width:min(420px,96%)!important;}
+  .suspect-matrix-layout{grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr)!important;}
+}
+
+@media (max-width:900px){
+  :root{--tap:46px;}
+  body{overflow:hidden;}
+  .menu-layout{padding:20px 16px 28px;}
+  .menu-stats{grid-template-columns:1fr;}
+  .menu-story-grid{grid-template-columns:1fr;}
+  .menu-story-card.featured{grid-column:auto;}
+
+  .game-screen.active{grid-template-rows:auto minmax(0,1fr) auto;}
+  .scene{overflow:hidden;}
+  .scene-stage{
+    width:min(100cqw,calc(100cqh * 16 / 9));
+    height:auto!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    aspect-ratio:16/9;
+    align-self:center;
+  }
+  .objective{align-self:end;justify-self:center;margin:8px;width:min(430px,calc(100% - 16px));}
+  .dock{width:calc(100% - 12px);margin:6px auto max(6px,env(safe-area-inset-bottom));}
+  .dock button{font-size:12px;padding:7px 3px;}
+
+  .modal{padding:8px!important;align-items:stretch;}
+  .modal-shell{max-height:calc(100dvh - 16px)!important;border-radius:16px!important;}
+  .modal-head{padding:14px!important;}
+  .modal-body{padding:14px!important;}
+
+  .prologue-card{grid-template-columns:1fr;max-height:94dvh;}
+  .prologue-media-wrap{max-height:34dvh;}
+  .prologue-image{height:34dvh;}
+
+  .interrogation{
+    grid-template-columns:1fr;
+    grid-template-rows:auto minmax(0,1fr);
+    gap:10px;
+    padding:10px!important;
+    overflow:auto!important;
+  }
+    .cinema-back{grid-column:1;grid-row:1;}
+  .cinema-subject-wrap{
+    grid-column:1;grid-row:1/3;
+    opacity:.3;
+    align-items:flex-end;
+  }
+  .interrogation-v5 .cinema-subject{height:min(70dvh,760px)!important;}
+  .cinema-dialogue-panel{
+    grid-column:1;
+    grid-row:2;
+    width:100%!important;
+    max-height:none!important;
+    align-self:start;
+    background:rgba(10,13,15,.96)!important;
+  }
+  .interrogation-v5 .cinema-topic-list{grid-template-columns:1fr;}
+
+  .modal.detective-nonmodal{
+    grid-template-columns:1fr;
+    grid-template-rows:1fr;
+    place-items:center;
+    padding:10px!important;
+    background:rgba(4,6,8,.58)!important;
+    backdrop-filter:blur(4px);
+    pointer-events:auto!important;
+  }
+  .modal.detective-nonmodal .detective-modal-shell{
+    grid-column:1;grid-row:1;
+    justify-self:center;
+    align-self:center;
+    width:min(560px,100%)!important;
+    max-width:560px!important;
+    max-height:calc(100dvh - 20px)!important;
+  }
+
+  .contradiction-choices{grid-template-columns:1fr!important;}
+  .case-board{grid-template-columns:1fr!important;}
+  .suspect-matrix-layout{display:flex!important;flex-direction:column;overflow:auto;}
+  .suspect-matrix-main{overflow:visible!important;}
+  .suspect-matrix-detail{border-left:0!important;border-top:1px solid rgba(255,255,255,.08);}
+  .suspect-matrix-table{min-width:760px!important;}
+  .investigation-guide-steps{grid-template-columns:1fr!important;}
+}
+
+@media (max-width:600px){
+  .topbar{min-height:54px;padding-inline:8px;}
+  .scene{
+    display:flex!important;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:flex-start;
+    overflow:auto;
+  }
+  .scene-stage{
+    flex:0 0 auto;
+    width:100%!important;
+    max-width:100%!important;
+    max-height:none!important;
+    aspect-ratio:16/9;
+  }
+  .objective{
+    flex:0 0 auto;
+    align-self:stretch;
+    justify-self:auto;
+    width:auto;
+    margin:8px;
+  }
+  .topbar .icon-btn{min-width:44px;}
+  .tiny-label{letter-spacing:.12em;}
+  .dock button span{font-size:18px;}
+  .dock button{font-size:10px;}
+
+  .menu-layout{padding:16px 12px 24px;}
+  .menu-actions>*{flex:1 1 100%;}
+  .menu-story-actions>*{flex:1 1 100%;}
+
+  .objective{font-size:12px;}
+  .objective-head{gap:8px;}
+
+  .cinema-dialogue-panel{padding:16px!important;border-radius:16px!important;}
+  .cinema-person-head{align-items:flex-start!important;}
+  .cinema-person-head h1{font-size:clamp(30px,11vw,46px)!important;}
+  .cinema-person-meta{max-width:none!important;justify-content:flex-start!important;}
+  .interrogation-v5 .cinema-dialogue-text{font-size:16px!important;line-height:1.45;min-height:auto!important;}
+  .cinema-topics-head small{width:100%;}
+
+  .detective-thought-bubble--inline-photo{padding:14px!important;}
+  .detective-inline-photo-wrap{float:none!important;width:120px!important;margin:0 12px 8px 0!important;}
+  .detective-inline-photo-wrap .detective-photo-card,
+  .detective-inline-photo-wrap .detective-photo{width:120px!important;height:150px!important;min-height:150px!important;}
+
+  .modal-head h2{font-size:clamp(22px,7vw,34px)!important;}
+  .evidence-library-card{grid-template-columns:44px minmax(0,1fr)!important;}
+  .people-grid,.evidence-library,.evidence-library-grid{grid-template-columns:1fr!important;}
+  .suspect-matrix-table{min-width:700px!important;}
+}
+
+@media (max-width:420px){
+  .dock{grid-template-columns:repeat(4,1fr);gap:2px;padding:4px;}
+  .dock button{padding:6px 2px;}
+  .location-title-wrap .tiny-label{display:none;}
+  .objective{margin:6px;width:calc(100% - 12px);}
+  .modal{padding:4px!important;}
+  .modal-shell{max-height:calc(100dvh - 8px)!important;}
+  .modal-head,.modal-body{padding:12px!important;}
+}
+
+/* Landscape phones: use two columns again when horizontal room exists. */
+@media (max-height:560px) and (min-width:720px){
+  .interrogation,
+  .modal.detective-nonmodal{
+    grid-template-columns:minmax(240px,.8fr) minmax(420px,1.2fr);
+    grid-template-rows:minmax(0,1fr);
+    padding:8px!important;
+  }
+  .modal.detective-nonmodal{
+    place-items:stretch;
+    background:transparent!important;
+    backdrop-filter:none;
+    pointer-events:none!important;
+  }
+  .cinema-back{grid-column:1;grid-row:1;}
+  .cinema-subject-wrap{grid-column:1;grid-row:1;opacity:1;}
+  .cinema-dialogue-panel{grid-column:2;grid-row:1;max-height:calc(100dvh - 16px)!important;}
+  .modal.detective-nonmodal .detective-modal-shell{grid-column:1;grid-row:1;width:min(420px,90%)!important;align-self:start;justify-self:end;}
+}
+
+/* =========================================================
+   MAIN MENU — DESKTOP FIT AUDIT V3
+   Desktop: one viewport, no page scroll. Tablet/mobile: natural flow.
+   ========================================================= */
+@media (min-width:1181px){
+  .menu-screen{
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+  }
+  .menu-layout{
+    width:min(1660px,100%)!important;
+    height:100dvh!important;
+    max-height:100dvh!important;
+    margin:0 auto!important;
+    padding:clamp(16px,2.2vh,28px) clamp(26px,3vw,56px)!important;
+    grid-template-columns:minmax(430px,.88fr) minmax(690px,1.28fr)!important;
+    gap:clamp(28px,3.2vw,58px)!important;
+    align-items:stretch!important;
+    align-content:center!important;
+    overflow:hidden!important;
+  }
+  .menu-hero{
+    align-self:center!important;
+    width:100%!important;
+    max-width:620px!important;
+    height:min(720px,calc(100dvh - 48px))!important;
+    min-height:0!important;
+    max-height:min(720px,calc(100dvh - 48px))!important;
+    padding:0!important;
+    display:grid!important;
+    grid-template-rows:auto auto auto auto auto!important;
+    align-content:space-between!important;
+    overflow:hidden!important;
+  }
+  .menu-hero h1{
+    font-size:clamp(58px,4.25vw,80px)!important;
+    line-height:.94!important;
+    margin:8px 0 12px!important;
+  }
+  .menu-lead{
+    font-size:clamp(15px,.92vw,17px)!important;
+    line-height:1.5!important;
+    max-width:590px!important;
+  }
+  .menu-stats{
+    margin-top:14px!important;
+    gap:10px!important;
+  }
+  .menu-stat{
+    min-height:78px!important;
+    padding:12px 14px!important;
+    border-radius:16px!important;
+  }
+  .menu-stat strong{
+    font-size:clamp(17px,1.05vw,19px)!important;
+    line-height:1.08!important;
+    white-space:nowrap!important;
+  }
+  .menu-stat span{
+    margin-top:6px!important;
+    font-size:clamp(12px,.76vw,14px)!important;
+    line-height:1.38!important;
+  }
+  .menu-actions{
+    margin-top:14px!important;
+    gap:8px!important;
+  }
+  .menu-actions button{
+    min-height:46px!important;
+    padding:11px 16px!important;
+  }
+  .menu-note{
+    margin-top:9px!important;
+    font-size:11px!important;
+  }
+
+  .menu-library{
+    align-self:center!important;
+    width:100%!important;
+    height:min(720px,calc(100dvh - 48px))!important;
+    min-height:0!important;
+    max-height:min(720px,calc(100dvh - 48px))!important;
+    padding:18px!important;
+    border-radius:26px!important;
+    display:grid!important;
+    grid-template-rows:auto minmax(0,1fr)!important;
+    gap:12px!important;
+    overflow:hidden!important;
+  }
+  .menu-library-head{
+    align-items:center!important;
+    gap:18px!important;
+    padding-bottom:12px!important;
+  }
+  .menu-library-head h2{
+    font-size:clamp(30px,2vw,36px)!important;
+    line-height:1.03!important;
+  }
+  .menu-library-head p{
+    max-width:390px!important;
+    font-size:clamp(12px,.76vw,14px)!important;
+    line-height:1.42!important;
+  }
+  .menu-story-grid{
+    min-height:0!important;
+    height:100%!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:minmax(0,1.28fr) minmax(0,.92fr)!important;
+    gap:12px!important;
+    overflow:hidden!important;
+  }
+  .menu-story-card{
+    min-height:0!important;
+  }
+  .menu-story-card.featured{
+    grid-column:1/-1!important;
+    grid-row:1!important;
+    grid-template-columns:minmax(250px,.82fr) minmax(330px,1.18fr)!important;
+    min-height:0!important;
+  }
+  .menu-story-card.featured .menu-story-thumb{
+    height:100%!important;
+    min-height:0!important;
+  }
+  .menu-story-card.featured .menu-story-copy{
+    padding:16px 18px!important;
+    gap:10px!important;
+    overflow:hidden!important;
+  }
+  .menu-story-card.featured .menu-story-copy h3{
+    font-size:clamp(29px,1.9vw,34px)!important;
+  }
+  .menu-story-card.featured .menu-story-copy p{
+    font-size:clamp(13px,.8vw,15px)!important;
+    line-height:1.45!important;
+  }
+  .menu-story-meta{
+    gap:6px!important;
+  }
+  .menu-story-meta span{
+    padding:5px 9px!important;
+    font-size:11px!important;
+  }
+  .menu-story-actions{
+    gap:8px!important;
+  }
+  .menu-story-actions button{
+    min-height:42px!important;
+    padding:9px 13px!important;
+  }
+  .menu-story-card.compact{
+    grid-row:2!important;
+    display:grid!important;
+    grid-template-columns:minmax(120px,.78fr) minmax(150px,1.22fr)!important;
+    min-height:0!important;
+  }
+  .menu-story-card.compact .menu-story-thumb{
+    min-height:0!important;
+    height:100%!important;
+  }
+  .menu-story-card.compact .menu-story-copy{
+    padding:12px!important;
+    gap:7px!important;
+    justify-content:center!important;
+    overflow:hidden!important;
+  }
+  .menu-story-card.compact .menu-story-copy h3{
+    font-size:20px!important;
+  }
+  .menu-story-card.compact .menu-story-copy p{
+    font-size:12px!important;
+    line-height:1.35!important;
+  }
+  .menu-story-card.compact button{
+    min-height:36px!important;
+    padding:7px 10px!important;
+    font-size:11px!important;
+  }
+  .menu-story-card.compact .story-badge,
+  .menu-story-card.compact .story-id{
+    padding:4px 7px!important;
+    font-size:9px!important;
+  }
+}
+
+/* Tablet and phone intentionally become scrollable only after the desktop
+   two-column composition no longer fits comfortably. */
+@media (max-width:1180px){
+  .menu-screen{overflow:auto!important;}
+  .menu-layout{
+    height:auto!important;
+    min-height:100dvh!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  .menu-library{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+}
+
+/* Keep all three main-menu feature headings inside their cards. */
+.menu-stat strong{
+  font-size:clamp(17px,1.15vw,19px)!important;
+  line-height:1.08!important;
+  white-space:nowrap!important;
+}
+
+
+/* =========================================================
+   INTERROGATION PORTRAIT HEADER — FINAL
+   The suspect is no longer a full-screen scene layer.
+   Header uses Grid/Flex only; portrait sits inside the panel.
+   ========================================================= */
+.cinema-subject-wrap{
+  display:none!important;
+}
+
+.cinema-person-head{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) clamp(176px,14vw,230px)!important;
+  gap:clamp(16px,2vw,28px)!important;
+  align-items:start!important;
+}
+
+.cinema-person-info{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+.cinema-person-name{
+  margin:6px 0 14px!important;
+  font-family:Georgia,serif;
+  font-size:clamp(38px,3.2vw,54px)!important;
+  line-height:.88!important;
+  font-weight:500!important;
+  letter-spacing:-.025em;
+  overflow:visible!important;
+}
+
+.cinema-person-name > span{
+  display:block;
+  white-space:normal;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+
+.cinema-person-meta{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
+  max-width:none!important;
+}
+
+.cinema-person-portrait{
+  width:100%;
+  aspect-ratio:4/3;
+  min-height:0;
+  overflow:hidden;
+  border-radius:16px;
+  border:1px solid rgba(215,180,106,.24);
+  background:
+    radial-gradient(circle at 50% 28%,rgba(215,180,106,.13),transparent 42%),
+    linear-gradient(180deg,rgba(29,25,21,.92),rgba(10,12,14,.98));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.035);
+}
+
+.interrogation-portrait{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  filter:none!important;
+}
+
+@media (max-width:900px){
+  .cinema-person-head{
+    grid-template-columns:minmax(0,1fr) clamp(140px,24vw,190px)!important;
+    gap:14px!important;
+  }
+  .cinema-person-name{
+    font-size:clamp(32px,6vw,44px)!important;
+    margin-bottom:10px!important;
+  }
+}
+
+@media (max-width:600px){
+  .cinema-person-head{
+    grid-template-columns:minmax(0,1fr) 112px!important;
+    gap:12px!important;
+  }
+  .cinema-person-name{
+    font-size:clamp(27px,8vw,36px)!important;
+    line-height:.92!important;
+  }
+  .cinema-person-portrait{
+    border-radius:12px;
+  }
+  .cinema-person-meta{
+    gap:5px!important;
+  }
+  .cinema-person-meta .cinema-status,
+  .cinema-person-meta .suspect-role,
+  .cinema-person-meta .mood{
+    font-size:9px!important;
+  }
+}
+
+@media (max-width:420px){
+  .cinema-person-head{
+    grid-template-columns:minmax(0,1fr) 92px!important;
+    gap:10px!important;
+  }
+  .cinema-person-name{
+    font-size:clamp(24px,8vw,32px)!important;
+  }
+}
+
+/* Final main-menu background lock: do not inherit story location art. */
+.menu-screen{background-image:url('assets/ui/main-page-detective-bg-v3.png')!important;background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important;}
+
+/* === CASE 2: MAYAK — navigation shell (2026-10-04) === */
+.thumb-mayak{background-image:url('assets/cases/mayak/ui/island-map.png')!important;background-position:center!important;background-size:cover!important;}
+.menu-story-card.mayak-card{opacity:1!important;}
+
+/* Both map and room screens use the same two-row Grid: header + content. */
+.mayak-map-screen.active{
+  display:grid!important;
+  grid-template-rows:auto minmax(0,1fr);
+  grid-template-columns:minmax(0,1fr);
+  min-height:100dvh;
+  background:#0a0d10;
+}
+.mayak-topbar,.mayak-map-screen>.topbar{
+  position:static!important;
+  inset:auto!important;
+  grid-row:1;
+  grid-column:1;
+  z-index:130!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+  height:auto!important;
+  min-height:64px;
+  border-radius:0!important;
+  padding:8px 12px;
+  background:rgba(8,11,15,.94)!important;
+  backdrop-filter:blur(12px);
+}
+.mayak-topbar .topbar-spacer{visibility:hidden;pointer-events:none;}
+.mayak-topbar .location-title-wrap{min-width:0;}
+.mayak-topbar .topbar-right{margin-left:0!important;justify-self:end;}
+
+.mayak-map-main{
+  grid-row:2;
+  grid-column:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  place-items:center;
+  gap:0;
+  padding:18px;
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#29353d 0,#151c21 42%,#090c0f 100%);
+}
+.mayak-map-stage{
+  position:relative;
+  width:min(100%,calc(150dvh - 150px));
+  max-width:1536px;
+  aspect-ratio:3/2;
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid rgba(231,195,115,.22);
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+  background:#111;
+}
+.mayak-map-image{display:block;width:100%;height:100%;object-fit:cover;}
+.mayak-map-hotspots{position:absolute;inset:0;pointer-events:none;}
+.mayak-map-hotspot{position:absolute;pointer-events:auto;border:1px solid transparent;background:transparent;border-radius:18px;cursor:pointer;transition:.18s ease;color:#fff;display:flex;align-items:center;justify-content:center;}
+.mayak-map-hotspot:hover,.mayak-map-hotspot:focus-visible{border-color:transparent;background:transparent;box-shadow:none;outline:none;}
+.mayak-map-label{position:static;transform:none;white-space:nowrap;background:transparent;border:0;padding:0;font-size:18px;font-weight:700;line-height:1.2;color:#fff;opacity:0;pointer-events:none;transition:.15s ease;text-shadow:0 2px 8px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.95);}
+.mayak-map-hotspot:hover .mayak-map-label,.mayak-map-hotspot:focus-visible .mayak-map-label{opacity:1;}
+
+/* The chooser lives in the map's content row. Grid stacking keeps its dark
+   backdrop below the header at every viewport size; no absolute offsets. */
+#mayakPlaceChooser{
+  position:static!important;
+  inset:auto!important;
+  grid-row:2;
+  grid-column:1;
+  z-index:120;
+  width:100%;
+  height:100%;
+  min-width:0;
+  min-height:0;
+  padding:18px!important;
+  display:grid!important;
+  grid-template-areas:"chooser";
+  place-items:center;
+  overflow:hidden;
+}
+#mayakPlaceChooser.hidden{display:none!important;}
+#mayakPlaceChooser .modal-backdrop{
+  position:static!important;
+  inset:auto!important;
+  grid-area:chooser;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.65);
+}
+#mayakPlaceChooser .modal-shell{
+  position:static!important;
+  grid-area:chooser;
+  justify-self:center;
+  align-self:center;
+  width:min(720px,100%)!important;
+  height:auto!important;
+  max-width:720px!important;
+  max-height:calc(100% - 24px)!important;
+  margin:0!important;
+  overflow:auto;
+}
+.mayak-place-shell{max-width:720px!important;}
+.mayak-place-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-height:0;}
+.mayak-place-btn{text-align:left;padding:14px 16px;border:1px solid rgba(255,255,255,.13);border-radius:13px;background:rgba(255,255,255,.055);color:#f2f0eb;cursor:pointer;}
+.mayak-place-btn:hover{border-color:rgba(219,177,89,.55);background:rgba(219,177,89,.1);}
+.mayak-place-btn:disabled,.mayak-place-btn.locked{opacity:.48;cursor:not-allowed;border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.025);}
+.mayak-place-btn:disabled:hover,.mayak-place-btn.locked:hover{border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.025);}
+.mayak-place-btn strong{display:block;font-size:18px;margin-bottom:4px;}
+.mayak-place-btn small{display:block;color:#bbb;line-height:1.35;font-size:15px;}
+
+@media(max-width:900px){
+  .mayak-map-main{overflow:auto;}
+}
+@media(max-width:600px){
+  .mayak-topbar,.mayak-map-screen>.topbar{min-height:54px;padding:6px 8px;gap:8px;}
+  .mayak-map-main{padding:10px;}
+  .mayak-map-stage{width:100%;aspect-ratio:3/2;}
+  .mayak-place-list{grid-template-columns:1fr;}
+  .mayak-map-label{font-size:14px;}
+  #mayakPlaceChooser{padding:10px!important;}
+  #mayakPlaceChooser .modal-shell{max-height:calc(100% - 8px)!important;}
+}
+
+
+/* All detective cases use the same room shell. Case 2 intentionally inherits
+   .game-screen, .topbar, .scene, .scene-stage and .dock from the universal UI. */
+.mayak-scene-screen .scene-bg{background-position:center;background-size:100% 100%;background-repeat:no-repeat;}
+
+/* === MAIN MENU STORY LIBRARY SCROLL (2026-10-04) ===
+   When two or more detective stories exist, keep the library header visible
+   and make the story list vertically scrollable instead of squeezing cards. */
+.menu-library.has-multiple-stories .menu-story-grid{
+  overflow-y:scroll!important;
+  overflow-x:hidden!important;
+  grid-template-rows:auto auto!important;
+  align-content:start!important;
+  scrollbar-gutter:stable;
+  overscroll-behavior:contain;
+  padding-right:7px!important;
+}
+.menu-library.has-multiple-stories .menu-story-card{
+  height:auto!important;
+  min-height:max-content!important;
+}
+.menu-library.has-multiple-stories .menu-story-card.featured{
+  min-height:310px!important;
+}
+.menu-library.has-multiple-stories .menu-story-card.compact{
+  min-height:190px!important;
+}
+.menu-library.has-multiple-stories .menu-story-card.featured .menu-story-copy,
+.menu-library.has-multiple-stories .menu-story-card.compact .menu-story-copy{
+  overflow:visible!important;
+}
+.menu-library.has-multiple-stories .menu-story-grid{
+  scrollbar-width:thin;
+  scrollbar-color:#d7b46a rgba(255,255,255,.06);
+}
+.menu-library.has-multiple-stories .menu-story-grid::-webkit-scrollbar{width:10px;}
+.menu-library.has-multiple-stories .menu-story-grid::-webkit-scrollbar-thumb{
+  background:#d7b46a;
+  border-radius:999px;
+  border:2px solid rgba(15,17,19,.8);
+}
+.menu-library.has-multiple-stories .menu-story-grid::-webkit-scrollbar-track{
+  background:rgba(255,255,255,.04);
+}
+
+@media (max-width:1180px){
+  .menu-library.has-multiple-stories{overflow:visible!important;}
+  .menu-library.has-multiple-stories .menu-story-grid{
+    max-height:min(72dvh,760px);
+  }
+}
+
+
+/* === MAIN MENU STORY LIBRARY PANEL SCROLL V2 (2026-10-04) ===
+   Scroll the whole "ВЫБЕРИТЕ ИСТОРИЮ" panel when there is more than one story.
+   The previous version scrolled only the inner grid, which could leave the
+   second case action below a clipped grid row. */
+.menu-library.has-multiple-stories{
+  overflow-y:scroll!important;
+  overflow-x:hidden!important;
+  scrollbar-gutter:stable!important;
+  overscroll-behavior:contain!important;
+  display:block!important;
+  scrollbar-width:thin;
+  scrollbar-color:#d7b46a rgba(255,255,255,.06);
+}
+.menu-library.has-multiple-stories::-webkit-scrollbar{width:11px;}
+.menu-library.has-multiple-stories::-webkit-scrollbar-thumb{
+  background:#d7b46a;
+  border-radius:999px;
+  border:2px solid rgba(15,17,19,.82);
+}
+.menu-library.has-multiple-stories::-webkit-scrollbar-track{
+  background:rgba(255,255,255,.045);
+  border-radius:999px;
+}
+.menu-library.has-multiple-stories .menu-library-head{
+  position:sticky!important;
+  top:-18px!important;
+  z-index:8!important;
+  margin:-18px -4px 0!important;
+  padding:18px 4px 12px!important;
+  background:linear-gradient(180deg,rgba(17,20,22,.99) 0%,rgba(17,20,22,.96) 82%,rgba(17,20,22,.88) 100%)!important;
+  backdrop-filter:blur(12px);
+}
+.menu-library.has-multiple-stories .menu-story-grid{
+  height:auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+  padding-right:0!important;
+  margin-top:12px!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-rows:auto auto!important;
+  align-content:start!important;
+  gap:12px!important;
+}
+.menu-library.has-multiple-stories .menu-story-card{
+  height:auto!important;
+  min-height:0!important;
+}
+.menu-library.has-multiple-stories .menu-story-card.featured{
+  min-height:310px!important;
+}
+.menu-library.has-multiple-stories .menu-story-card.compact{
+  min-height:210px!important;
+}
+.menu-library.has-multiple-stories .menu-story-card.featured .menu-story-copy,
+.menu-library.has-multiple-stories .menu-story-card.compact .menu-story-copy{
+  overflow:visible!important;
+}
+@media (max-width:1180px){
+  .menu-library.has-multiple-stories{
+    max-height:min(78dvh,760px)!important;
+    overflow-y:scroll!important;
+  }
+  .menu-library.has-multiple-stories .menu-story-grid{
+    grid-template-columns:1fr!important;
+  }
+  .menu-library.has-multiple-stories .menu-story-card.featured{
+    grid-column:auto!important;
+  }
+}
+
+
+/* === STORY LIBRARY: 3 CASES VISIBLE, SCROLL FROM CASE 4 (2026-10-04) ===
+   The first three cases must always fit on desktop without scrolling.
+   Scrolling is enabled only when a fourth (or later) story exists. */
+@media (min-width:1181px){
+  .menu-library{
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-rows:auto minmax(0,1fr)!important;
+  }
+  .menu-library .menu-story-grid{
+    min-height:0!important;
+    height:100%!important;
+    overflow:hidden!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:minmax(250px,.93fr) minmax(0,1.07fr)!important;
+    align-content:stretch!important;
+    gap:12px!important;
+    padding-right:0!important;
+    margin-top:0!important;
+  }
+  .menu-library .menu-story-card{
+    min-height:0!important;
+    height:100%!important;
+  }
+  .menu-library .menu-story-card.featured{
+    grid-column:1/-1!important;
+    grid-row:1!important;
+    min-height:0!important;
+  }
+  .menu-library .menu-story-card.featured .menu-story-thumb{
+    min-height:0!important;
+    height:100%!important;
+  }
+  .menu-library .menu-story-card.featured .menu-story-copy{
+    padding:13px 16px!important;
+    gap:8px!important;
+    overflow:hidden!important;
+  }
+  .menu-library .menu-story-card.featured .menu-story-copy h3{
+    font-size:clamp(28px,1.8vw,32px)!important;
+    line-height:1.02!important;
+  }
+  .menu-library .menu-story-card.featured .menu-story-copy p{
+    font-size:clamp(12px,.77vw,14px)!important;
+    line-height:1.4!important;
+  }
+  .menu-library .menu-story-card.featured .menu-story-actions{
+    margin-top:auto!important;
+    gap:8px!important;
+  }
+  .menu-library .menu-story-card.featured .menu-story-actions button{
+    min-height:38px!important;
+    padding:8px 12px!important;
+  }
+  .menu-library .menu-story-card.compact{
+    grid-row:2!important;
+    min-height:0!important;
+    height:100%!important;
+  }
+
+  /* Only case 4+ activates scrolling. Header stays fixed; stories scroll. */
+  .menu-library.has-overflow-stories{
+    overflow:hidden!important;
+  }
+  .menu-library.has-overflow-stories .menu-library-head{
+    position:static!important;
+    margin:0!important;
+    padding-top:0!important;
+    background:none!important;
+    backdrop-filter:none!important;
+  }
+  .menu-library.has-overflow-stories .menu-story-grid{
+    overflow-y:scroll!important;
+    overflow-x:hidden!important;
+    grid-template-rows:250px 255px!important;
+    grid-auto-rows:255px!important;
+    align-content:start!important;
+    scrollbar-gutter:stable!important;
+    overscroll-behavior:contain!important;
+    padding-right:7px!important;
+    scrollbar-width:thin;
+    scrollbar-color:#d7b46a rgba(255,255,255,.06);
+  }
+  .menu-library.has-overflow-stories .menu-story-card{
+    height:100%!important;
+    min-height:0!important;
+  }
+  .menu-library.has-overflow-stories .menu-story-card:nth-child(n+4){
+    grid-row:auto!important;
+  }
+  .menu-library.has-overflow-stories .menu-story-grid::-webkit-scrollbar{width:10px;}
+  .menu-library.has-overflow-stories .menu-story-grid::-webkit-scrollbar-thumb{
+    background:#d7b46a;
+    border-radius:999px;
+    border:2px solid rgba(15,17,19,.82);
+  }
+  .menu-library.has-overflow-stories .menu-story-grid::-webkit-scrollbar-track{
+    background:rgba(255,255,255,.045);
+    border-radius:999px;
+  }
+}
+
+/* On tablet/phone normal page scrolling remains the safer layout. */
+@media (max-width:1180px){
+  .menu-library.has-overflow-stories{
+    overflow:visible!important;
+    max-height:none!important;
+  }
+  .menu-library.has-overflow-stories .menu-story-grid{
+    overflow:visible!important;
+    max-height:none!important;
+  }
+}
+
+
+/* === COMPACT STORY CARDS ALIGNMENT (2026-10-04) ===
+   Case #2 and #3 use the same vertical content rhythm.
+   Actions stay pinned to the bottom; locked-case CTA matches the primary CTA. */
+@media (min-width:1181px){
+  .menu-library .menu-story-card.compact .menu-story-copy{
+    justify-content:flex-start!important;
+    align-items:stretch!important;
+  }
+  .menu-library .menu-story-card.compact .menu-story-topline{
+    min-height:26px!important;
+    align-content:center!important;
+  }
+  .menu-library .menu-story-card.compact .menu-story-copy h3{
+    margin:0!important;
+  }
+  .menu-library .menu-story-card.compact .menu-story-copy p{
+    margin:0!important;
+  }
+  .menu-library .menu-story-card.compact .menu-story-copy > button{
+    margin-top:auto!important;
+    width:100%!important;
+  }
+}
+
+/* === MAYAK STAGE 1: universal scene interactions === */
+.mayak-person-hotspot{background:transparent!important;border-color:transparent!important;box-shadow:none!important;}
+.mayak-person-hotspot::before,.mayak-person-hotspot::after{display:none!important;}
+.mayak-person-hotspot .hotspot-label{left:50%!important;bottom:8%!important;transform:translateX(-50%)!important;}
+#modalBody .card.done{opacity:.72;}
+#modalBody .card.done h3{text-decoration:line-through;}
+
+/* =========================================================
+   FIX — Расследование / модальное окно Маяка
+   2026-10-06
+   1) затемнённая подложка всегда покрывает весь экран;
+   2) окно «Расследование» получает рабочую вертикальную и горизонтальную прокрутку.
+   ========================================================= */
+#modal.modal{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-width:100vw!important;
+  min-height:100dvh!important;
+  padding:clamp(8px,2vw,28px)!important;
+  overflow:hidden!important;
+  z-index:1000!important;
+}
+#modal .modal-backdrop{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  background:rgba(0,0,0,.72)!important;
+}
+#modal .modal-shell{
+  position:relative!important;
+  z-index:1!important;
+  width:min(1480px,100%)!important;
+  max-width:100%!important;
+  max-height:calc(100dvh - clamp(16px,4vw,56px))!important;
+}
+#modal .case-tools-modal-shell,
+#modal .investigation-modal-shell,
+#modal .deduction-modal-shell{
+  height:min(900px,calc(100dvh - clamp(16px,4vw,56px)))!important;
+  max-height:calc(100dvh - clamp(16px,4vw,56px))!important;
+}
+#modal #modalBody.investigation-modal-body,
+#modal #modalBody.case-tools-modal-body,
+#modal #modalBody.deduction-modal-body{
+  display:flex!important;
+  flex-direction:column!important;
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow:auto!important;
+}
+#modal .case-tools-shell{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  height:100%!important;
+  overflow:hidden!important;
+}
+#modal .case-tool-body{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow:auto!important;
+}
+#modal .suspect-matrix-layout{
+  min-height:0!important;
+  height:100%!important;
+}
+#modal .suspect-matrix-main,
+#modal .suspect-matrix-detail{
+  min-height:0!important;
+}
+#modal .suspect-matrix-main{
+  overflow:hidden!important;
+}
+#modal .suspect-matrix-scroll{
+  width:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  overflow:auto!important;
+  overscroll-behavior:contain!important;
+}
+#modal .suspect-matrix-table{
+  min-width:960px!important;
+}
+#modal .suspect-matrix-materials{
+  overflow:auto!important;
+}
+
+@media (max-width:900px){
+  #modal .case-tools-modal-shell,
+  #modal .investigation-modal-shell,
+  #modal .deduction-modal-shell{
+    height:calc(100dvh - 16px)!important;
+    max-height:calc(100dvh - 16px)!important;
+  }
+  #modal .suspect-matrix-layout{
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:auto!important;
+  }
+  #modal .suspect-matrix-main{
+    overflow:visible!important;
+  }
+  #modal .suspect-matrix-scroll{
+    max-height:none!important;
+  }
+}
+
+/* =========================================================
+   UNIVERSAL SYSTEM PANEL OVERLAY — 2026-10-06
+   Applies only to the four persistent case panels:
+   People / Materials / Notebook / Investigation.
+   One fixed full-viewport dimmer sits above the scene, top bar and dock;
+   the modal content keeps its own independent scroll areas.
+   ========================================================= */
+#modal.universal-system-panel{
+  position:fixed!important;
+  inset:0!important;
+  padding:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-width:100vw!important;
+  min-height:100dvh!important;
+  z-index:2000!important;
+  isolation:isolate;
+}
+#modal.universal-system-panel .modal-backdrop{
+  position:absolute!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-width:100vw!important;
+  min-height:100dvh!important;
+  background:rgba(3,5,6,.91)!important;
+  -webkit-backdrop-filter:blur(2px) brightness(.48);
+  backdrop-filter:blur(2px) brightness(.48);
+  z-index:0!important;
+}
+#modal.universal-system-panel .modal-shell{
+  position:relative!important;
+  z-index:1!important;
+}
+/* Keep scrolling inside the window, never on the full-screen dimmer. */
+#modal.universal-system-panel .modal-body{
+  min-height:0!important;
+  overflow:auto!important;
+  overscroll-behavior:contain!important;
+}
+#modal.universal-system-panel .materials-modal-body{
+  overflow:auto!important;
+}
+#modal.universal-system-panel .case-tools-modal-body,
+#modal.universal-system-panel .investigation-modal-body,
+#modal.universal-system-panel .deduction-modal-body{
+  min-height:0!important;
+  overflow:auto!important;
+}
+#modal.universal-system-panel .case-tool-body,
+#modal.universal-system-panel .suspect-matrix-scroll,
+#modal.universal-system-panel .suspect-matrix-detail,
+#modal.universal-system-panel .suspect-matrix-materials{
+  overscroll-behavior:contain!important;
+}
+
+
+/* Универсальная Матрица подозреваемых: все заголовки колонок начинаются с одной верхней линии. */
+#modal .suspect-matrix-table thead th{
+  vertical-align:top!important;
+}
+#modal .suspect-matrix-table thead th>b{
+  margin-top:0!important;
+  line-height:1.2!important;
+}
+
+
+/* ---------- Mayak hotspot labels: hover/focus only ---------- */
+.mayak-evidence-hotspot .hotspot-label,
+.mayak-person-hotspot .hotspot-label{
+  opacity:0!important;
+  pointer-events:none!important;
+}
+.mayak-evidence-hotspot:hover .hotspot-label,
+.mayak-evidence-hotspot:focus-visible .hotspot-label,
+.mayak-person-hotspot:hover .hotspot-label,
+.mayak-person-hotspot:focus-visible .hotspot-label{
+  opacity:1!important;
+}

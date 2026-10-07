@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Детективные истории</title>
+  <link rel="stylesheet" href="style.css?v=20261006-mayak-label-hover-v1" />
+  <link rel="stylesheet" href="responsive.css?v=20261006-mayak-label-hover-v1" />
+</head>
+<body>
+  <div id="app">
+        <section id="menuScreen" class="screen menu-screen active">
+      <div class="menu-shade"></div>
+      <div class="menu-layout">
+        <div class="menu-hero">
+          <div class="eyebrow">ИНТЕРАКТИВНЫЙ ДЕТЕКТИВ</div>
+          <h1>Детективные истории</h1>
+          <p class="menu-lead">Исследуйте локации, собирайте материалы дела, проверяйте версии в допросах и стройте собственную цепочку выводов. Каждая история — отдельное расследование со своими людьми, мотивами и ложными следами.</p>
+
+          <div class="menu-stats">
+            <div class="menu-stat glass">
+              <strong>Истории</strong>
+              <span>отдельные законченные расследования</span>
+            </div>
+            <div class="menu-stat glass">
+              <strong>Допросы</strong>
+              <span>допрашивайте персонажей и предъявляйте им найденные улики</span>
+            </div>
+            <div class="menu-stat glass">
+              <strong>Расследование</strong>
+              <span>проверяйте версии и восстанавливайте хронологию</span>
+            </div>
+          </div>
+
+          <div class="menu-actions">
+            <button id="menuStartBtn" class="primary" data-action="start">Открыть дело №1</button>
+            <button data-action="how">Как играть</button>
+            <button data-action="reset">Сбросить прогресс</button>
+          </div>
+          <div class="menu-note">Автосохранение включено. Прогресс дела сохраняется в браузере.</div>
+        </div>
+
+        <div class="menu-library glass-heavy">
+          <div class="menu-library-head">
+            <div>
+              <span class="tiny-label">ВЫБЕРИТЕ ИСТОРИЮ</span>
+              <h2>Картотека расследований</h2>
+            </div>
+            <p>Сейчас доступны два дела. Новые истории можно добавлять сюда в том же стиле без переделки интерфейса.</p>
+          </div>
+
+          <div class="menu-story-grid">
+            <article class="menu-story-card featured available">
+              <div class="menu-story-thumb thumb-hall"></div>
+              <div class="menu-story-copy">
+                <div class="menu-story-topline">
+                  <span class="story-id">ДЕЛО №1</span>
+                </div>
+                <h3>Семейный рецепт</h3>
+                <p>Из ресторана исчезла рукописная книга рецептов. Витрина заперта, следов взлома нет, а почти каждый участник вечера скрывает свою версию событий.</p>
+                <div class="menu-story-actions">
+                  <button id="caseStartBtn" class="primary" data-action="start">Начать расследование</button>
+                  <button data-action="how">Как играть</button>
+                </div>
+              </div>
+            </article>
+
+            <article class="menu-story-card compact available mayak-card">
+              <div class="menu-story-thumb thumb-mayak"></div>
+              <div class="menu-story-copy">
+                <div class="menu-story-topline">
+                  <span class="story-id">ДЕЛО №2</span>
+                </div>
+                <h3>Маяк</h3>
+                <p>На отрезанном штормом острове гаснет маяк. Семеро людей оказываются внутри замкнутого круга, а техническая авария постепенно превращается в дело о саботаже.</p>
+                <button class="primary" data-mayak-action="start">Начать расследование</button>
+              </div>
+            </article>
+
+            <article class="menu-story-card compact locked">
+              <div class="menu-story-thumb thumb-corridor"></div>
+              <div class="menu-story-copy">
+                <div class="menu-story-topline">
+                  <span class="story-badge">СКОРО</span>
+                  <span class="story-id">ДЕЛО №3</span>
+                </div>
+                <h3>Темный проход</h3>
+                <p>Новая история появится после расширения антологии.</p>
+                <button class="primary" data-action="locked-case">Выход ожидается</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <div id="prologueOverlay" class="prologue-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="prologueTitle">
+      <div class="prologue-backdrop"></div>
+      <div class="prologue-card glass-heavy">
+        <div class="prologue-media-wrap">
+          <img id="prologueImage" class="prologue-image" src="assets/ui/prologue-family-recipe.png" alt="Пролог истории Семейный рецепт" />
+        </div>
+        <div class="prologue-copy">
+          <span class="tiny-label">ПРОЛОГ</span>
+          <h2 id="prologueTitle">Семейный рецепт</h2>
+          <p>Во время юбилейного вечера в ресторане Орловых бесследно исчезает семейная книга рецептов, реликвия, из-за которой давно тянется вражда и конфликты между членами семьи, тайны и споры о праве на наследство.</p>
+          <p>Поначалу все выглядит как обычная кража, но чем глубже начинается расследование, тем яснее становится, что у каждого из присутствующих были свои причины интересоваться книгой. Но кто именно из них стоит за ее пропажей?</p>
+          <div class="prologue-actions">
+            <button id="prologueContinueBtn" class="primary" data-action="close-prologue">Начать расследование</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="gameScreen" class="screen game-screen">
+      <header class="topbar glass">
+        <button class="icon-btn" data-action="map" title="Карта">⌖</button>
+        <div class="location-title-wrap">
+          <span class="tiny-label">ЛОКАЦИЯ</span>
+          <strong id="locationTitle">Главный зал</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" data-action="menu" title="Главное меню">☰</button>
+        </div>
+      </header>
+
+      <main id="scene" class="scene" aria-label="Игровая локация">
+        <div id="sceneStage" class="scene-stage">
+          <div id="sceneBg" class="scene-bg"></div>
+          <div id="sceneObjects" class="scene-objects"></div>
+          <div id="sceneCast" class="scene-cast"></div>
+          <div id="sceneOcclusion" class="scene-occlusion"></div>
+          <div id="characterHighlights" class="character-highlights"></div>
+          <div id="hotspots" class="hotspots"></div>
+          <div id="sceneVignette" class="scene-vignette"></div>
+        </div>
+        <div class="objective glass" id="objectiveBox">
+          <div class="objective-head">
+            <span class="tiny-label">ТЕКУЩАЯ ЦЕЛЬ</span>
+            <span class="objective-badge">Подсказка</span>
+          </div>
+          <div id="objectiveText">Осмотрите главный зал и поговорите с владельцем ресторана.</div>
+        </div>
+      </main>
+
+      <nav class="dock glass">
+        <button data-panel="people"><span>♟</span>Люди</button>
+        <button data-panel="evidence"><span>◇</span>Материалы</button>
+        <button data-panel="notebook"><span>▤</span>Блокнот</button>
+        <button data-panel="case"><span>◎</span>Расследование</button>
+      </nav>
+    </section>
+
+    <div id="mayakPrologueOverlay" class="prologue-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="mayakPrologueTitle">
+      <div class="prologue-backdrop"></div>
+      <div class="prologue-card glass-heavy">
+        <div class="prologue-media-wrap">
+          <img class="prologue-image" src="assets/cases/mayak/ui/prologue.png" alt="Пролог истории Маяк" />
+        </div>
+        <div class="prologue-copy">
+          <span class="tiny-label">ПРОЛОГ · ДЕЛО №2</span>
+          <h2 id="mayakPrologueTitle">Маяк</h2>
+          <p>Шторм отрезал небольшой остров от материка. В самый опасный момент гаснет основной огонь маяка, а резервная система не запускается.</p>
+          <p>На острове находятся только семь человек. Сначала всё похоже на техническую аварию, но журналы автоматики указывают на вмешательство. У каждого есть причина что-то скрывать — и только один человек действительно вывел маяк из строя.</p>
+          <div class="prologue-actions">
+            <button class="primary" data-mayak-action="begin">Начать расследование</button>
+            <button data-mayak-action="back-menu">Вернуться</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="mayakMapScreen" class="screen mayak-map-screen">
+      <header class="topbar glass mayak-topbar">
+        <span class="icon-btn topbar-spacer" aria-hidden="true"></span>
+        <div class="location-title-wrap">
+          <span class="tiny-label">ДЕЛО №2</span>
+          <strong>Маяк — карта острова</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" data-mayak-action="back-menu" title="Главное меню">☰</button>
+        </div>
+      </header>
+      <main class="mayak-map-main">
+        <div class="mayak-map-stage" id="mayakMapStage">
+          <img src="assets/cases/mayak/ui/island-map.png" alt="Карта острова" class="mayak-map-image" />
+          <div class="mayak-map-hotspots" id="mayakMapHotspots"></div>
+        </div>
+      </main>
+
+
+    <div id="mayakPlaceChooser" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" data-mayak-action="close-chooser"></div>
+      <div class="modal-shell glass-heavy mayak-place-shell">
+        <div class="modal-head">
+          <div><span class="tiny-label">ОБЪЕКТ ОСТРОВА</span><h2 id="mayakPlaceTitle">Локации</h2></div>
+          <button class="icon-btn" data-mayak-action="close-chooser">×</button>
+        </div>
+        <div id="mayakPlaceList" class="mayak-place-list"></div>
+      </div>
+    </div>
+    </section>
+
+    <section id="mayakSceneScreen" class="screen game-screen mayak-scene-screen">
+      <header class="topbar glass">
+        <button class="icon-btn" data-mayak-action="back-map" title="Карта острова">⌖</button>
+        <div class="location-title-wrap">
+          <span class="tiny-label">ЛОКАЦИЯ</span>
+          <strong id="mayakLocationTitle">Центральный зал</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" data-mayak-action="back-menu" title="Главное меню">☰</button>
+        </div>
+      </header>
+
+      <main id="mayakScene" class="scene" aria-label="Игровая локация">
+        <div id="mayakSceneStage" class="scene-stage">
+          <div id="mayakSceneBg" class="scene-bg"></div>
+          <div id="mayakSceneObjects" class="scene-objects"></div>
+          <div id="mayakSceneCast" class="scene-cast"></div>
+          <div id="mayakSceneOcclusion" class="scene-occlusion"></div>
+          <div id="mayakCharacterHighlights" class="character-highlights"></div>
+          <div id="mayakHotspots" class="hotspots"></div>
+          <div class="scene-vignette"></div>
+        </div>
+      </main>
+
+      <nav class="dock glass" aria-label="Разделы дела Маяк">
+        <button data-panel="people"><span>♟</span>Люди</button>
+        <button data-panel="evidence"><span>◇</span>Материалы</button>
+        <button data-panel="notebook"><span>▤</span>Блокнот</button>
+        <button data-panel="case"><span>◎</span>Расследование</button>
+      </nav>
+    </section>
+
+    <div id="toast" class="toast"></div>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" data-action="close-modal"></div>
+      <div class="modal-shell glass-heavy">
+        <div class="modal-head">
+          <div>
+            <span class="tiny-label" id="modalKicker">МАТЕРИАЛЫ ДЕЛА</span>
+            <h2 id="modalTitle">Заголовок</h2>
+          </div>
+          <button class="icon-btn" data-action="close-modal">×</button>
+        </div>
+        <div id="modalBody" class="modal-body"></div>
+      </div>
+    </div>
+
+    <div id="interrogation" class="interrogation interrogation-v5 hidden" data-suspect="">
+      <div id="interrogationBg" class="cinema-bg" aria-hidden="true"></div>
+      <div class="cinema-grade" aria-hidden="true"></div>
+      <div class="cinema-vignette" aria-hidden="true"></div>
+
+      <button class="back-btn cinema-back" data-action="exit-interrogation">← Вернуться к сцене</button>
+
+      <section class="cinema-dialogue-panel" aria-label="Допрос">
+        <header class="cinema-person-head">
+          <div class="cinema-person-info">
+            <span class="tiny-label">ДОПРОС</span>
+            <h1 id="suspectName" class="cinema-person-name">
+              <span id="suspectFirstName">Имя</span>
+              <span id="suspectLastName">Фамилия</span>
+            </h1>
+            <div class="cinema-person-meta">
+              <span id="dossierStatus" class="cinema-status">Подозреваемый</span>
+              <span id="suspectRole" class="suspect-role">роль</span>
+              <span id="suspectMood" class="mood">Спокоен</span>
+            </div>
+          </div>
+          <div class="cinema-person-portrait" aria-label="Портрет допрашиваемого">
+            <img id="suspectSprite" class="interrogation-portrait" alt="" />
+          </div>
+        </header>
+
+        <div class="cinema-line"></div>
+
+        <div class="cinema-statement-head">
+          <span class="tiny-label">ТЕКУЩАЯ ВЕРСИЯ</span>
+        </div>
+
+        <div id="dialogueText" class="dialogue-text cinema-dialogue-text">Выберите тему разговора.</div>
+
+        <div class="cinema-topics-head">
+          <span class="tiny-label">ТЕМЫ РАЗГОВОРА</span>
+          <small>Новые вопросы открываются по мере расследования</small>
+        </div>
+        <div id="topicList" class="topic-list cinema-topic-list"></div>
+
+        <div class="cinema-footer">
+          <div class="cinema-progress-copy">
+            <span>Ход допроса</span>
+            <small id="dossierTalkCount">0 тем</small>
+          </div>
+          <div class="dossier-progress"><span id="dossierProgressBar"></span></div>
+          <div class="cinema-evidence-mini">
+            <span class="tiny-label">СВЯЗАНО С ДЕЛОМ</span>
+            <small id="dossierEvidenceCount">0 найдено</small>
+          </div>
+          <div id="dossierEvidence" class="dossier-evidence-list cinema-evidence-list"></div>
+        </div>
+      </section>
+    </div>
+
+    <div id="contradiction" class="contradiction hidden">
+      <div class="contradiction-card glass-heavy">
+        <div class="eyebrow">ПРОВЕРКА НОВОЙ ВЕРСИИ</div>
+        <h2 id="contradictionTitle">Что опровергает эту реплику?</h2>
+        <blockquote id="statementQuote"></blockquote>
+        <div id="contradictionChoices" class="contradiction-choices"></div>
+        <div id="contradictionSelectionHint" class="contradiction-selection-hint">Выберите один материал. Он должен проверять именно последнюю версию, а не просто быть связан с делом.</div>
+        <div class="contradiction-actions">
+          <button data-action="close-contradiction">Вернуться к допросу</button>
+          <button id="confirmContradictionProof" class="primary" data-action="confirm-contradiction-proof" disabled>Проверить выбранный материал</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="src/collectibles.js?v=20261006-universal-collectibles-v1"></script>
+  <script src="src/ui-panels.js?v=20261006-universal-collectibles-v1"></script>
+  <script src="src/main.js?v=20261006-universal-collectibles-v1"></script>
+  <script src="src/mayak.js?v=20261006-universal-collectibles-v1"></script>
+</body>
+</html>

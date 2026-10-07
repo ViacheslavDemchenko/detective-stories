@@ -5431,6 +5431,9 @@ select,input,textarea,option{
 
 /* Маяк: журнал Степана лежит прямо на фоне локации, поэтому активная зона
    остаётся невидимой — без рамок и подсветки области при наведении. */
+#mayakHotspots [data-mayak-hotspot="hotspot_stepan_log"]{
+  min-height:0;
+}
 .stealth-evidence-hotspot::before,
 .stealth-evidence-hotspot:hover::before,
 .stealth-evidence-hotspot:focus-visible::before{

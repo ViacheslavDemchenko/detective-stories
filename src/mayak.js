@@ -245,7 +245,7 @@
 
   const sceneHotspots = {
     central1:[
-      {id:'hotspot_stepan_log',label:'Журнал Степана',x:56.2,y:56.8,w:8.8,h:6.2,grants:['ev_stepan_log_edit'],persistent:true,stealth:true}
+      {id:'hotspot_stepan_log',label:'Журнал Степана',x:57.5,y:57.5,w:8.5,h:3.7,grants:['ev_stepan_log_edit'],persistent:true,stealth:true}
     ],
     technical:[
       {id:'hotspot_cabinet',label:'Технический шкаф автоматики',x:61.0,y:27.3,w:9.7,h:18.4,grants:['ev_automation_cabinet']},
